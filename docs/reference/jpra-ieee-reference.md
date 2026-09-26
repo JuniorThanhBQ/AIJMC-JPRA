@@ -1,0 +1,1 @@
+[1] V. Q. H. Nguyen, B. K. P. Truong, A. H. Tran, et al., "Abnormal job postings detection with explanation on Vietnamese job hunter platforms," Neural Computing and Applications, vol. 38, p. 445, 2026, doi: 10.1007/s00521-026-12153-5.
