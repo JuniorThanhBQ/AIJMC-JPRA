@@ -131,6 +131,7 @@ jobs:
         with:
           target: 'http://localhost:8501'
           cmd_options: '-m 2'
+          allow_issue_writing: false
 
   failure-reporter:
     needs: [build-check, lint-check, sast-security, automated-testing, dast-security]

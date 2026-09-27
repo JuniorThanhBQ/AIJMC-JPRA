@@ -76,7 +76,7 @@ flowchart TD
   - pip-audit: Executed in-runner via `uv run pip-audit --format sarif`
   - Bandit: `bandit` generating SARIF output targeting `app/`
   - Trivy: `aquasecurity/trivy-action` (configured with `scan-type: fs` and `format: sarif`)
-  - Zizmor: `woodruffw/zizmor-action` auditing `.github/workflows/`
+  - Zizmor: `zizmorcore/zizmor-action` auditing `.github/workflows/`
 
 ### 3.3 Security, Secrets & Permissions
 - **GitHub Permissions:**
