@@ -82,9 +82,8 @@ Not available
 1. Package License: [package-license-record](docs/license/package-license-record.md)
 2. JPRA Showcase Image: [image](docs/image/)
 3. Acceptance Testing: [testing](docs/testing/) 
-4. JPRA SRS: [SRS](docs/SRS/) 
-5. JPRA ADR: [ADR](docs/ADR/)
-6. JPRA Architecture: [C4-diagram](docs/C4-diagram/)
+4. JPRA SRS: [software Requirements Specification](docs/SRS/) 
+5. JPRA SAD: [software Architecture Document](docs/SAD/)
 7. References: [references](docs/reference/)
 
 ## VIII. Additional Note

@@ -1,0 +1,53 @@
+[project]
+name = "aijmc-jpra"
+version = "0.1.0"
+requires-python = ">=3.14"
+dependencies = [
+    "google-genai>=2.25.0",
+    "groq>=1.7.0",
+    "pydantic-ai>=2.51.0",
+    "python-dotenv>=1.2.3",
+    "streamlit>=1.64.0",
+    "supabase>=2.31.0",
+]
+
+[dependency-groups]
+dev = [
+    "playwright>=1.63.0",
+    "pre-commit>=4.6.2",
+    "pylint>=4.0.9",
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["app/tests"]
+asyncio_mode = "auto"
+
+[tool.pylint.main]
+source-roots = ["."]
+jobs = 0
+
+[tool.pylint.messages_control]
+disable = [
+    "missing-module-docstring",
+    "missing-class-docstring",
+    "missing-function-docstring",
+    "too-few-public-methods",
+    "too-many-arguments",
+    "too-many-locals",
+    "too-many-instance-attributes",
+    "duplicate-code",
+    "invalid-name",
+    "import-outside-toplevel",
+    "broad-exception-caught",
+    "fixme"
+]
+
+[tool.pylint.format]
+max-line-length = 100
+
+[tool.pylint.reports]
+output-format = "colorized"
+score = true
