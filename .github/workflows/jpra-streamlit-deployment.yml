@@ -1,0 +1,50 @@
+name: jpra-streamlit-deployment
+
+on:
+  # zizmor: ignore[dangerous-triggers]
+  workflow_run:
+    workflows: ["jpra-commit-actions"]
+    branches: [main]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  deployments: write
+
+concurrency:
+  group: streamlit-production-deployment
+  cancel-in-progress: false
+
+jobs:
+  deploy-streamlit-production:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' && github.event.workflow_run.head_branch == 'main')
+    environment:
+      name: production
+      url: ${{ secrets.STREAMLIT_APP_URL }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - name: Verify entrypoint configuration
+        run: |
+          test -f app/main.py
+          test -f pyproject.toml
+
+      - name: Verify live Streamlit deployment health
+        env:
+          STREAMLIT_URL: ${{ secrets.STREAMLIT_APP_URL }}
+        run: |
+          if [ -z "${STREAMLIT_URL}" ]; then
+            echo "STREAMLIT_APP_URL is not set"
+            exit 1
+          fi
+          URL="${STREAMLIT_URL%/}"
+          case "${URL}" in
+            http://*|https://*) TARGET_URL="${URL}/_stcore/health" ;;
+            *) TARGET_URL="https://${URL}/_stcore/health" ;;
+          esac
+          curl --fail --retry 15 --retry-delay 5 --retry-all-errors "${TARGET_URL}"
