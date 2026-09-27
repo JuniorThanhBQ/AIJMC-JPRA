@@ -3,40 +3,49 @@
 ## Document Metadata
 - **Workflow ID:** CICD-006
 - **Workflow Name:** Streamlit Application Deployment Pipeline
-- **Target GitHub Action:** `.github/workflows/streamlit-deployment.yml`
-- **Status:** Draft / Proposed
+- **Target GitHub Action:** `.github/workflows/jpra-streamlit-deployment.yml`
+- **Target Platform:** Streamlit Community Cloud
+- **Application Entry Point:** `app/main.py`
+- **Status:** Approved / Active
 - **Author / Owner:** [@JuniorThanh]
-- **Created Date:** [2026-09-27]
-- **Last Updated:** [2026-09-27]
+- **Created Date:** 2026-09-27
+- **Last Updated:** 2026-09-27
 
 ---
 
 ## 1. WHAT (Scope & Definition)
 ### 1.1 Objective
-[Define the scope of deploying the JPRA Streamlit user interface and backend services to the hosting platform.]
+This workflow manages the continuous delivery lifecycle for the JPRA Streamlit user interface and AI analysis services on Streamlit Community Cloud. It operates as a strict deployment gate: deployment verification and post-deploy health validation only trigger on the `main` branch after `CICD-001-commit-actions-workflow` has successfully completed all five validation stages.
 
 ### 1.2 System Scope
-- **Target Deployment Platform:** [e.g., Streamlit Community Cloud / Render / Docker Container on Cloud VM]
-- **Deployed Components:** [Frontend dashboard, PydanticAI agent orchestrator, API bridges]
-- **Environment Tiers:** [Staging vs. Production deployment targets]
+- **Included:**
+  - Automated triggering contingent upon `CICD-001` (`jpra-commit-actions`) green completion.
+  - Verification of Streamlit configuration, entry point (`app/main.py`), and dependencies (`pyproject.toml`).
+  - Post-deployment live health verification pinging the `/_stcore/health` endpoint of the live application.
+  - GitHub Deployment status reporting (environment: `production`).
+- **Excluded:**
+  - Pre-deployment tests and SAST/DAST checks (handled upstream in `CICD-001`).
+  - PR/feature-branch deployments (production deployment targets `main` only).
 
 ### 1.3 Key Deliverables & Outputs
-[Live service endpoint URL, deployment status badge, release tag artifacts, health check audit logs.]
+- Active deployment tracking in GitHub Deployments dashboard.
+- Verified live service endpoint (e.g., `https://aijmc-jpra.streamlit.app`).
+- Health check audit log confirming runtime readiness.
 
 ---
 
 ## 2. WHY (Motivation & Rationale)
 ### 2.1 Problem Statement
-[Describe the operational risks of manual deployments, secret mismanagement, and service downtime.]
+Deploying unverified code directly to a live demonstration environment causes service outages, broken UI components, and potential exposure of non-functional features to research evaluators. Gating deployment behind a verified CI pipeline guarantees that only vetted, fully tested code is served in production.
 
-### 2.2 Availability & Delivery Goals
-- **Continuous Delivery:** [Automatic deployment of verified releases to end-users]
-- **Zero Downtime / Rollback Safety:** [Strategy for rolling updates or rapid rollback on failures]
-- **Environment Parity:** [Ensuring identical environment variables and runtime configurations]
+### 2.2 Quality Goals & Benefits
+- **Zero-Regret Deployment:** New versions only reach the live environment after passing build checks, linting, SAST, automated tests, and DAST.
+- **Automated Health Auditing:** Guarantees that the Streamlit backend worker and web socket handlers are operational immediately post-release.
+- **Traceability:** Correlates live deployments directly to git commit hashes on `main`.
 
 ### 2.3 Architectural Alternatives & Trade-offs
-- **Considered Platforms:** [Streamlit Community Cloud webhook vs. Containerized deployment (Docker + Cloud Run / VPS)]
-- **Trade-off Analysis:** [Ease of deployment vs. environment customizability and cold-start latency]
+- **Considered Platforms:** Streamlit Community Cloud vs. Containerized deployment on Cloud Run / VPS.
+- **Selection Rationale:** Streamlit Community Cloud offers zero-cost managed hosting, automated TLS, and native GitHub repository synchronization, ideal for research prototypes. Gating it via GitHub Actions provides enterprise-grade release control.
 
 ---
 
@@ -44,21 +53,28 @@
 ### 3.1 Execution Flow
 ```mermaid
 flowchart TD
-    A["Release Tag / Merge to Main"] --> B["Checkout Code"]
-    B --> C["Run Smoke / Integration Tests"]
-    C --> D{"Tests Pass?"}
-    D -->|No| E["Abort Deployment & Notify"]
-    D -->|Yes| F["Inject Production Secrets"]
-    F --> G["Trigger Deployment / Build Image"]
-    G --> H["Perform Post-Deploy Health Check"]
-    H --> I{"Service Responding 200 OK?"}
-    I -->|Yes| J["Deployment Success"]
-    I -->|No| K["Trigger Alert / Rollback"]
+    Upstream(["CICD-001: jpra-commit-actions finishes on main"]) --> CheckEvent{"Conclusion == 'success'?"}
+    
+    CheckEvent -->|No / Failed| Abort(["Abort Deployment<br/>(Broken code never deployed)"])
+    
+    CheckEvent -->|Yes| DeployJob["Job: deploy-streamlit-production<br/>(ubuntu-latest)"]
+    
+    DeployJob --> Register["Register GitHub Deployment Status: in_progress"]
+    DeployJob --> StreamlitSync["Streamlit Community Cloud pulls latest main<br/>(Builds using pyproject.toml & app/main.py)"]
+    
+    StreamlitSync --> Probe{"Poll Health Probe<br/>GET /_stcore/health"}
+    
+    Probe -->|HTTP 200 OK| Green["Set Deployment Status: success<br/>(Live at aijmc-jpra.streamlit.app)"]
+    Probe -->|Timeout / Error| Red["Set Deployment Status: failure<br/>(Alert maintainer)"]
 ```
 
 ### 3.2 Environment & Build Specifications
-- **Runtime Environment:** [Python version, OS baseline, system libraries like libglib / chromium dependencies]
-- **Build & Packaging:** [Dockerfile containerization vs. virtual environment package restoration]
+- **Runner OS:** `ubuntu-latest`
+- **Application Configuration:**
+  - Entry point: `app/main.py`
+  - Python version: 3.11+
+  - Dependencies: Managed via `pyproject.toml`
+  - Headless mode: `server.headless = true` configured in `.streamlit/config.toml`
 
 ### 3.3 Security, Secrets & Permissions
 - **GitHub Permissions:**
@@ -67,36 +83,58 @@ flowchart TD
     contents: read
     deployments: write
   ```
-- **Required Production Secrets:**
-  - `GEMINI_API_KEY`: [Google Gen SDK authentication]
-  - `GROQ_API_KEY`: [Groq LPU inference key]
-  - `SUPABASE_URL` & `SUPABASE_KEY`: [Supabase database credentials]
-  - `DEPLOY_WEBHOOK_URL` / `CLOUD_CREDENTIALS`: [Deployment authentication]
-- **Secret Isolation:** [Use of GitHub Environments (e.g. `production`) with protection rules]
+- **Secrets Management:**
+  - Runtime API keys (`GEMINI_API_KEY`, `GROQ_API_KEY`, `SUPABASE_URL`, `SUPABASE_KEY`) are managed securely inside the **Streamlit Community Cloud Secrets Dashboard** (TOML format), ensuring zero secret exposure in GitHub runner logs.
+  - Optional `STREAMLIT_APP_URL` stored as a GitHub Environment variable.
 
-### 3.4 Verification, Health Check & Rollback
-- **Post-Deploy Health Check:** [Endpoint URL validation command, e.g. curl health endpoint]
-- **Rollback Procedure:** [Step-by-step process for reverting to prior known-good commit]
+### 3.4 Post-Deployment Health Verification & Rollback
+- **Health Check Strategy:** The runner executes a polling loop against the application's health endpoint:
+  ```bash
+  curl --fail --retry 15 --retry-delay 5 --retry-all-errors https://${STREAMLIT_APP_URL}/_stcore/health
+  ```
+- **Rollback Procedure:** If the health probe fails after deployment, the maintainer reverts the merge commit on `main` via `git revert`, automatically restoring the previous stable build.
 
 ---
 
 ## 4. WHEN (Trigger Strategy & Conditions)
 ### 4.1 Trigger Events
-- **Primary Triggers:** [e.g., Release tag creation `v*.*.*` or push to `main` following PR merge]
-- **Manual Trigger:** [`workflow_dispatch` with environment selection]
+- **Primary Trigger (Chained CI Gate):**
+  ```yaml
+  on:
+    workflow_run:
+      workflows: ["jpra-commit-actions"]
+      branches: [main]
+      types: [completed]
+    workflow_dispatch:
+  ```
+- **Execution Condition:**
+  ```yaml
+  if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+  ```
 
 ### 4.2 Branch & Environment Gates
-- **Target Branch:** [e.g., `main`]
-- **Required Preconditions:** [Mandatory passing of `CICD-001` through `CICD-005` before deployment triggers]
+- **Target Branch:** Strictly `main`.
+- **Environment:** `production` (configured with GitHub Environment protection rules).
 
 ### 4.3 Concurrency & Deployment Locking
-- **Concurrency Group:** `production-deployment`
-- **Cancel in Progress:** false (never cancel mid-deployment to avoid inconsistent state)
+- **Concurrency Group:**
+  ```yaml
+  concurrency:
+    group: streamlit-production-deployment
+    cancel-in-progress: false
+  ```
+- *Rationale:* `cancel-in-progress: false` prevents terminating a deployment mid-cycle, guaranteeing deployment atomicity.
 
 ---
 
 ## 5. Acceptance & Verification Checklist
-- [ ] Staging/production secrets are securely bound to GitHub Environments.
-- [ ] Upstream testing gates must succeed before deployment initiates.
-- [ ] Post-deployment health verification script validates UI responsiveness.
-- [ ] Rollback strategy is documented and validated.
+- [X] Workflow triggers automatically on `main` when `jpra-commit-actions` succeeds.
+- [X] Deployment is aborted if any upstream stage in `CICD-001` fails.
+- [X] Application entry point is verified as `app/main.py`.
+- [X] Post-deployment health probe validates live `_stcore/health` responsiveness.
+- [X] Production secrets are isolated within Streamlit Community Cloud settings.
+- [X] Concurrency prevents overlapping simultaneous deployments.
+
+---
+
+## 6. Decision Date: Accepted in 2026-09-27
