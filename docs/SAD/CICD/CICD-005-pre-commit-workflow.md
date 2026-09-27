@@ -52,16 +52,16 @@ Without automated client-side checks, developers accidentally commit trailing sp
 flowchart TD
     A["Developer runs: git commit -m '...'"] --> B["Git triggers .git/hooks/pre-commit"]
     B --> C["Pre-Commit executes hooks on staged files"]
-    
+
     subgraph Local_Hooks ["Client-Side Hook Sequence"]
         H1["1. File Hygiene (whitespace, EOF, check-yaml, large files)"]
         H2["2. Ruff (format & check)"]
         H3["3. Gitleaks (secret detection)"]
         H4["4. Zizmor (workflow security audit)"]
     end
-    
+
     C --> H1 --> H2 --> H3 --> H4
-    
+
     H4 --> D{"All Hooks Passed?"}
     D -->|Yes| E["Commit Accepted into Git History"]
     D -->|No: Auto-Fixed| F["Files modified by hooks<br/>(Stage changes and re-commit)"]

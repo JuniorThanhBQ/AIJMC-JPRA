@@ -11,4 +11,3 @@ if st.button("Analyze Reliability"):
         st.info(f"Target URL: {job_url}")
     else:
         st.warning("Please provide a valid URL.")
-        

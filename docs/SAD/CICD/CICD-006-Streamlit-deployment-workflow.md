@@ -54,16 +54,16 @@ Deploying unverified code directly to a live demonstration environment causes se
 ```mermaid
 flowchart TD
     Upstream(["CICD-001: jpra-commit-actions finishes on main"]) --> CheckEvent{"Conclusion == 'success'?"}
-    
+
     CheckEvent -->|No / Failed| Abort(["Abort Deployment<br/>(Broken code never deployed)"])
-    
+
     CheckEvent -->|Yes| DeployJob["Job: deploy-streamlit-production<br/>(ubuntu-latest)"]
-    
+
     DeployJob --> Register["Register GitHub Deployment Status: in_progress"]
     DeployJob --> StreamlitSync["Streamlit Community Cloud pulls latest main<br/>(Builds using pyproject.toml & app/main.py)"]
-    
+
     StreamlitSync --> Probe{"Poll Health Probe<br/>GET /_stcore/health"}
-    
+
     Probe -->|HTTP 200 OK| Green["Set Deployment Status: success<br/>(Live at aijmc-jpra.streamlit.app)"]
     Probe -->|Timeout / Error| Red["Set Deployment Status: failure<br/>(Alert maintainer)"]
 ```

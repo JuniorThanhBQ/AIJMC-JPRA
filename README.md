@@ -23,7 +23,7 @@
 ## I. Introduction
 The JPRA project, or Job Postings Reliability Analysis, is a separate study from the original AIJMC project aimed at finding solutions to assess the safety and reliability of a specific job posting within the Vietnamese job market. The expected assessment techniques to be applied are rule-based, AI agent, and local models such as ViReCAX. Details of the references are presented in [docs/reference/jpra-ieee-reference.md](docs/reference/jpra-ieee-reference.md).
 
-## II. JPRA Primary Goal 
+## II. JPRA Primary Goal
 The overall goal of JPRA is to rapidly develop a prototype capable of binary classification of a job posting as reliable or unreliable, with the input being a URL link and the output being a reliability percentage along with a detailed assessment explaining the reasons behind that percentage.
 
 The overall objectives, divided equally over six weeks of development, are as follows:
@@ -81,8 +81,8 @@ Not available
 ## VII. References
 1. Package License: [package-license-record](docs/license/package-license-record.md)
 2. JPRA Showcase Image: [image](docs/image/)
-3. Acceptance Testing: [testing](docs/testing/) 
-4. JPRA SRS: [software Requirements Specification](docs/SRS/) 
+3. Acceptance Testing: [testing](docs/testing/)
+4. JPRA SRS: [software Requirements Specification](docs/SRS/)
 5. JPRA SAD: [software Architecture Document](docs/SAD/)
 7. References: [references](docs/reference/)
 

@@ -109,7 +109,7 @@ flowchart TD
 
 ### 4.3 Concurrency & Resource Limits
 - **Timeout Limit:** 15 minutes per parallel job.
-- **Concurrency Strategy:** 
+- **Concurrency Strategy:**
   ```yaml
   concurrency:
     group: security-audit

@@ -24,3 +24,15 @@ func Lint() error {
 func Clean() error {
 	return sh.RunV("bash", "scripts/clean_cache.sh")
 }
+
+func Secret() error {
+	return sh.RunV("bash", "scripts/generate_secret_key.sh")
+}
+
+func Hooks() error {
+	return sh.RunV("bash", "scripts/setup_hooks.sh")
+}
+
+func Check() error {
+	return sh.RunV("bash", "scripts/run_pre_commit.sh")
+}

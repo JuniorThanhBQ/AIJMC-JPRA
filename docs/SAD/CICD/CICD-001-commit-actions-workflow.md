@@ -46,19 +46,19 @@ Without continuous automated validation, commit quality degrades, security risks
 ```mermaid
 flowchart TD
     Trigger(["Trigger: PR to main OR Push on main"]) --> J1["Job 1: Build Check<br/>(Streamlit dependencies & uv sync)"]
-    
+
     J1 -->|Pass| J2["Job 2: Lint Check<br/>(pylint with uv)"]
     J1 -->|Fail| Bot["Job 6: Failure Reporter Bot<br/>(gh issue search -> append or create [BUG])"]
-    
+
     J2 -->|Pass| J3["Job 3: SAST Security<br/>(gitleaks, Semgrep, bandit<br/>Fail on Medium & High, Skip Low)"]
     J2 -->|Fail| Bot
-    
+
     J3 -->|Pass| J4["Job 4: Automated Testing<br/>(pytest unit & integration + Playwright E2E)"]
     J3 -->|Fail| Bot
-    
+
     J4 -->|Pass| J5["Job 5: DAST Security<br/>(Headless Streamlit daemon localhost:8501<br/>+ OWASP ZAP Baseline Scan)"]
     J4 -->|Fail| Bot
-    
+
     J5 -->|Pass| Success(["All Checks Passed (Green Check)"])
     J5 -->|Fail| Bot
 ```
@@ -66,7 +66,7 @@ flowchart TD
 ### 3.2 Environment & Runner Requirements
 - **Runner OS:** `ubuntu-latest`
 - **Runtime & Tool Versions:** Python 3.11+ managed by `uv`
-- **Caching Mechanism:** 
+- **Caching Mechanism:**
   - `uv` cache: `~/.cache/uv` keyed by `uv.lock` / `pyproject.toml`
   - Playwright browser cache: `~/.cache/ms-playwright`
 

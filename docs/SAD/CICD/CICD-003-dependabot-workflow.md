@@ -50,12 +50,12 @@ Without automated dependency tracking, packages suffer from version decay, accum
 flowchart TD
     Trigger(["Dependabot Schedule Trigger"]) --> Scan["Detect Manifests: pyproject.toml & .github/workflows/"]
     Scan --> Check{"Updates Available?"}
-    
+
     Check -->|No| Idle(["Idle / No Action"])
-    
+
     Check -->|Yes: Minor / Patch| GroupPR["Consolidate into single daily PR<br/>(Group: minor-and-patch)"]
     Check -->|Yes: Major| MajorPR["Create isolated weekly PR per package"]
-    
+
     GroupPR & MajorPR --> CI["Trigger CICD-001 Validation<br/>(Build, Lint, SAST, Tests, DAST)"]
     CI --> Review["Maintainer Manual Review & Merge<br/>(Strictly No Auto-Merge)"]
 ```

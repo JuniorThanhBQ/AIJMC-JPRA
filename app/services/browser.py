@@ -3,10 +3,12 @@ from typing import AsyncGenerator
 from contextlib import asynccontextmanager
 from playwright.async_api import async_playwright, Browser, Page
 
+
 def get_chromium_channel() -> str | None:
     if shutil.which("chromium") or shutil.which("chromium-browser"):
         return "chromium"
     return None
+
 
 @asynccontextmanager
 async def launch_browser(headless: bool = True) -> AsyncGenerator[Browser, None]:
@@ -21,6 +23,7 @@ async def launch_browser(headless: bool = True) -> AsyncGenerator[Browser, None]
         finally:
             await browser.close()
 
+
 @asynccontextmanager
 async def create_page(headless: bool = True) -> AsyncGenerator[Page, None]:
     async with launch_browser(headless=headless) as browser:
@@ -29,4 +32,3 @@ async def create_page(headless: bool = True) -> AsyncGenerator[Page, None]:
             yield page
         finally:
             await page.close()
-            
