@@ -78,7 +78,7 @@ jobs:
         run: uv run bandit -c pyproject.toml -r app -ll --format sarif --output bandit.sarif || true
 
       - name: Upload Bandit SARIF
-        uses: github/codeql-action/upload-sarif@6bb031afdd8eb862ea3fc1848194185e076637e5
+        uses: github/codeql-action/upload-sarif@1c5b675653bb5c22dbe9b12b556ec555138e09fd
         if: always()
         with:
           sarif_file: bandit.sarif
@@ -104,7 +104,7 @@ jobs:
         continue-on-error: true
 
       - name: Upload Trivy SARIF
-        uses: github/codeql-action/upload-sarif@6bb031afdd8eb862ea3fc1848194185e076637e5
+        uses: github/codeql-action/upload-sarif@1c5b675653bb5c22dbe9b12b556ec555138e09fd
         if: always()
         with:
           sarif_file: trivy.sarif
