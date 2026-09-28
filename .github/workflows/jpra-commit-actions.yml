@@ -24,7 +24,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup uv
-        uses: astral-sh/setup-uv@1edb52594c857e2b5b13128931090f0640537287
+        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7
         with:
           enable-cache: true
 
@@ -44,7 +44,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup uv
-        uses: astral-sh/setup-uv@1edb52594c857e2b5b13128931090f0640537287
+        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7
         with:
           enable-cache: true
 
@@ -70,7 +70,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup uv
-        uses: astral-sh/setup-uv@1edb52594c857e2b5b13128931090f0640537287
+        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7
         with:
           enable-cache: true
 
@@ -92,7 +92,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup uv
-        uses: astral-sh/setup-uv@1edb52594c857e2b5b13128931090f0640537287
+        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7
         with:
           enable-cache: true
 
@@ -115,7 +115,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup uv
-        uses: astral-sh/setup-uv@1edb52594c857e2b5b13128931090f0640537287
+        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7
         with:
           enable-cache: true
 
