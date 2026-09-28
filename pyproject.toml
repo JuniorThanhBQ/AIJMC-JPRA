@@ -1,6 +1,6 @@
 [project]
 name = "aijmc-jpra"
-version = "0.1.0"
+version = "0.2.1"
 requires-python = ">=3.14"
 dependencies = [
     "google-genai>=2.25.0",
@@ -13,6 +13,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "bandit[sarif,toml]>=1.9.4",
     "playwright>=1.63.0",
     "pre-commit>=4.6.2",
     "pylint>=4.0.9",
@@ -51,3 +52,11 @@ max-line-length = 100
 [tool.pylint.reports]
 output-format = "colorized"
 score = true
+
+[tool.bandit]
+targets = ["app"]
+exclude_dirs = [
+    "tests",
+    "app/tests",
+    ".venv",
+]

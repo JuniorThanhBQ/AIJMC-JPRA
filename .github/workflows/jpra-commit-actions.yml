@@ -78,9 +78,7 @@ jobs:
         run: uv sync --frozen --all-groups
 
       - name: Run Bandit
-        run: |
-          uv run pip install bandit
-          uv run bandit -r app -ll
+        run: uv run bandit -c pyproject.toml -r app -ll
 
   automated-testing:
     needs: [sast-security]

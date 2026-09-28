@@ -7,7 +7,7 @@
 - **Status:** Approved / Active
 - **Author / Owner:** [@JuniorThanh]
 - **Created Date:** 2026-09-27
-- **Last Updated:** 2026-09-27
+- **Last Updated:** 2026-09-28
 
 ---
 
@@ -73,7 +73,7 @@ flowchart TD
 - **Tool Versions & Actions:**
   - Python runtime: 3.11+ managed with `uv`
   - Gitleaks: `gitleaks/gitleaks-action` (requires `fetch-depth: 0` for git history traversal)
-  - pip-audit: Executed in-runner via `uv run pip-audit --format sarif`
+  - pip-audit: Executed in-runner via `uv run pip-audit --desc`
   - Bandit: `bandit` generating SARIF output targeting `app/`
   - Trivy: `aquasecurity/trivy-action` (configured with `scan-type: fs` and `format: sarif`)
   - Zizmor: `zizmorcore/zizmor-action` auditing `.github/workflows/`
@@ -89,7 +89,7 @@ flowchart TD
 - **Required Secrets:** Built-in `GITHUB_TOKEN` for publishing SARIF reports to the Security API.
 - **False-Positive Handling:**
   - Secrets: Suppressed via `.gitleaksignore`.
-  - Python SAST: Managed via `.bandit` configuration.
+  - Python SAST: Managed via `pyproject.toml` (`[tool.bandit]`).
   - Triage: Suppressed or dismissed directly inside the GitHub Security Code Scanning tab with documented rationale.
 
 ### 3.4 Failure Behavior & Escalation

@@ -53,14 +53,7 @@ jobs:
       - name: Run pip-audit
         run: |
           uv run pip install pip-audit
-          uv run pip-audit --format sarif --output pip-audit.sarif || true
-
-      - name: Upload pip-audit SARIF
-        uses: github/codeql-action/upload-sarif@6bb031afdd8eb862ea3fc1848194185e076637e5
-        if: always()
-        with:
-          sarif_file: pip-audit.sarif
-          category: pip-audit
+          uv run pip-audit --desc || true
 
   scan-sast:
     runs-on: ubuntu-latest
@@ -82,9 +75,7 @@ jobs:
         run: uv sync --all-groups
 
       - name: Run Bandit
-        run: |
-          uv run pip install bandit bandit-sarif-formatter
-          uv run bandit -r app/ --format sarif --output bandit.sarif || true
+        run: uv run bandit -c pyproject.toml -r app -ll --format sarif --output bandit.sarif || true
 
       - name: Upload Bandit SARIF
         uses: github/codeql-action/upload-sarif@6bb031afdd8eb862ea3fc1848194185e076637e5
