@@ -216,3 +216,13 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# AGENTS
+AGENTS.md
+
+docs/ieee-report/*
+docs/ieee-report/**/*
+!docs/ieee-report/**/
+!docs/ieee-report/**/conference-latex-template.zip
+# !docs/ieee-report/*.pdf
+# !docs/ieee-report/**/*.pdf
