@@ -35,9 +35,30 @@ The overall objectives, divided equally over six weeks of development, are as fo
 
 4. Finalize the JPRA IEEE Conference report and submit it to the supervising lecturer for feedback in week 6, from November 2, 2026 to November 8, 2026.
 
+## III. JPRA Research Subjects and Scope
+The research subjects of JPRA are job postings, the reliability of job postings, fraud detection in job postings, fact-checking with an AI Agent, and web retrieval for evidence-based misinformation detection. The main research subject is job posting evaluation with web search techniques.
+
+The research scope:
+
+1. Streamlit (Prototype): AIJMC-JPRA will only focus on Prototype development. After researching and validating this prototype, it will be integrated into AIJMC for further web app development.
+
+2. Storage: Using PostgreSQL and Supabase. The reason for this trade-off was acknowledged in ADR-002-JPRA-Database.
+
+3. AI Agent Framework: Pydantic AI will be used for the JPRA Agent. The reason for this trade-off was acknowledged in ADR-003-JPRA-AI-Agent-Framework.
+
+4. JPRA tools: A collection of supplementary tools for AI Agents that serve as intermediaries, providing the additional information or assessment methods necessary for the AI ​​Agent to evaluate the reliability of job postings.
+
+5. Security: I/O validation (XSS, SQL Injection, Prompt Injection, URL Validation, Secure URL Content), CAPTCHA, and rate limiting. JPRA won’t require users to log in but will save usage records (Including logging errors) for maintenance.
+
+6. Large Language Model (LLM): Using cloud LLMs (Gemini, GPT, Groq) and local models (Gwen, ViReCAX). These LLMs will be augmented by using JPRA tools for the job posting evaluation process. The research does not include training/pre-training/fine-tune machine learning or deep learning models.
 
 
 ## III. Architecture and Tech Stack
+
+### 1. JPRA Architecture
+
+
+### 2. JPRA Tech Stack
 
 | Components | Technology | Version / Stack | Reason for use |
 | :--- | :--- | :--- | :--- |
@@ -57,6 +78,9 @@ The overall objectives, divided equally over six weeks of development, are as fo
 To ensure steady progress across research, engineering, and academic reporting within the project timeline, two methods are implemented:
 
 ### 1. Agile Kanban Management (Jira)
+
+ <img src="https://res.cloudinary.com/dfolk8pz2/image/upload/v1791024859/69bd187d-b4e4-4e6c-a4e2-a777a146ef92.png" alt="AIJMC-JPRA Agile Kanban"  />
+
 * **Workspace:** [AIJMC-JPRA](https://aijmc.atlassian.net/jira/software/projects/JPRA/boards/2?filter=&groupBy=none)
 * **Scope:** Research milestones, sprint planning, and high-level deliverables.
 * **Reason for use:**
@@ -65,6 +89,10 @@ To ensure steady progress across research, engineering, and academic reporting w
   * **Structured Work Breakdown:** Supports structured decomposition of complex R&D initiatives into epics, user stories, and actionable sub-tasks.
 
 ### 2. Defect and Bug Tracking (GitHub Projects / Issues)
+
+ <img src="https://res.cloudinary.com/dfolk8pz2/image/upload/v1791024999/05294e54-fc26-4f54-a3d0-915fd7fab799.png" alt="AIJMC-JPRA Projects and Issues"  />
+
+
 * **Workspace:** [JPRA GitHub Bug Tracker](https://github.com/JuniorThanhBQ/AIJMC-JPRA/issues)
 * **Scope:** Code-level bug reports, technical debt, scraping pipeline failures, and repository maintenance.
 * **Reason for use:**
@@ -73,17 +101,35 @@ To ensure steady progress across research, engineering, and academic reporting w
   * **Separation of Concerns:** Keeps strategic roadmap planning and academic goals organized in Jira, while technical fixes and defect resolution remain localized and developer-accessible on GitHub.
 
 ## V. Installation and Usage Guidance
-Not available
+### 1. For AIJMC-JPRA local
+> Will be updated soon.
+
+### 2. For AIJMC-JPRA cloud
+> Link to website: [aijmc-jpra.streamlit.app ](https://aijmc-jpra.streamlit.app/)
+
+**Things to keep in mind:**
+1. Please enter only supported URLs. The list of URLs and recruitment platforms supported by AIJMC-JPRA is shown on the "Supported Platforms" page.
+2. AIJMC-JPRA never requires any form of login or payment for use; if you notice anything unusual, please report it immediately to thanh.vantrung2005@gmail.com.
+3. The domain aijmc-jpra.streamlit.app is hosted by Streamlit. Any domains other than this are fraudulent.
+4. Please regard AIJMC-JPRA solely as a support tool. Final decisions remain yours, and the developers accept no liability for any decisions taken based on the use of the AIJMC-JPRA tool.
+
+</div>
 
 ## VI. Showcase
-Not available
+**Dark background:**
+
+![temporary showcase](docs/image/temp-showcase.png)
+
+**Light background:**
+
+![temporary light showcase](docs/image/temp-light-showcase.png)
 
 ## VII. References
 1. Package License: [package-license-record](docs/license/package-license-record.md)
 2. JPRA Showcase Image: [image](docs/image/)
 3. Acceptance Testing: [testing](docs/testing/)
-4. JPRA SRS: [software Requirements Specification](docs/SRS/)
-5. JPRA SAD: [software Architecture Document](docs/SAD/)
+4. JPRA SRS: [software requirements specification](docs/SRS/)
+5. JPRA SAD: [software architecture document](docs/SAD/)
 7. References: [references](docs/reference/)
 
 ## VIII. Additional Note
@@ -126,5 +172,3 @@ AIJMC-JPRA/
 ├── magefile.go
 └── README.md
 </pre>
-
-</div>
