@@ -16,7 +16,7 @@ dev = [
     "bandit[sarif,toml]>=1.9.4",
     "playwright>=1.63.0",
     "pre-commit>=4.6.2",
-    "pylint>=4.0.9",
+    "pylint>=4.1.1",
     "pytest>=9.1.1",
     "pytest-asyncio>=1.4.0",
 ]
