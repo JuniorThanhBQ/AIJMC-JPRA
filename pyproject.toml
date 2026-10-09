@@ -6,7 +6,7 @@ dependencies = [
     "google-genai>=2.26.0",
     "groq>=1.7.0",
     "pydantic-ai>=2.52.0",
-    "python-dotenv>=1.2.3",
+    "python-dotenv>=1.2.4",
     "streamlit>=1.64.0",
     "supabase>=2.31.0",
 ]
