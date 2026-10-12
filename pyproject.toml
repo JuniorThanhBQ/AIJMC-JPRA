@@ -8,7 +8,7 @@ dependencies = [
     "pydantic-ai>=2.53.0",
     "python-dotenv>=1.2.4",
     "streamlit>=1.64.0",
-    "supabase>=2.31.0",
+    "supabase>=2.32.0",
 ]
 
 [dependency-groups]
