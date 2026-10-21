@@ -14,7 +14,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     "bandit[sarif,toml]>=1.9.4",
-    "playwright>=1.63.0",
+    "playwright>=1.64.0",
     "pre-commit>=4.7.0",
     "pylint>=4.1.3",
     "pytest>=9.1.1",
