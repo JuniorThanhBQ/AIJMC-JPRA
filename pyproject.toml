@@ -5,7 +5,7 @@ requires-python = ">=3.14"
 dependencies = [
     "google-genai>=2.31.0",
     "groq>=1.7.0",
-    "pydantic-ai>=2.56.0",
+    "pydantic-ai>=2.57.0",
     "python-dotenv>=1.2.4",
     "streamlit>=1.66.0",
     "supabase>=2.33.0",
